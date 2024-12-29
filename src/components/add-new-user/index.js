@@ -1,5 +1,6 @@
 "use client";
 
+import { addNewUserAction } from "@/actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -27,6 +28,14 @@ const AddNewUser = () => {
     );
   };
 
+  async function handleAddNewUserAction() {
+    const result = await addNewUserAction(addNewUserFormData);
+    if (result) {
+      setOpenDialog(false);
+      setAddNewUserFormData(addNewUserFormInitialState);
+    }
+  }
+
   return (
     <div>
       <div className="flex justify-around ">
@@ -47,7 +56,7 @@ const AddNewUser = () => {
             <DialogHeader>
               <DialogTitle>Add User</DialogTitle>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
+            <form action={handleAddNewUserAction} className="grid gap-4 py-4">
               {addNewUserFormControls.map((item) => (
                 <div
                   key={item.name}
@@ -72,16 +81,17 @@ const AddNewUser = () => {
                   />
                 </div>
               ))}
-            </div>
-            <DialogFooter>
-              <Button
-                disabled={!handleSaveButtonDisable()}
-                type="submit"
-                className="disabled:text-opacity-60"
-              >
-                Save
-              </Button>
-            </DialogFooter>
+
+              <DialogFooter>
+                <Button
+                  disabled={!handleSaveButtonDisable()}
+                  type="submit"
+                  className="disabled:text-opacity-60"
+                >
+                  Save
+                </Button>
+              </DialogFooter>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
