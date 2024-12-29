@@ -4,7 +4,6 @@ import SingleUser from "@/components/single-user";
 
 const UserManagement = async () => {
   const allUsers = await getAllUserAction();
-  console.log(allUsers.data);
 
   return (
     <div className="p-20">
