@@ -27,3 +27,21 @@ export async function addNewUserAction(formData) {
     };
   }
 }
+
+export async function getAllUserAction() {
+  await connectToDB();
+
+  try {
+    const allUsers = await User.find({});
+    return {
+      success: true,
+      data: allUsers,
+    };
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return {
+      success: false,
+      message: "Failed to fetch users. Please try again.",
+    };
+  }
+}

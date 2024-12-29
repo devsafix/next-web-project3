@@ -1,6 +1,6 @@
 "use client";
 
-import { addNewUserAction } from "@/actions";
+import { addNewUserAction, getAllUserAction } from "@/actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { addNewUserFormControls, addNewUserFormInitialState } from "@/utils";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const AddNewUser = () => {
@@ -19,8 +20,7 @@ const AddNewUser = () => {
   const [addNewUserFormData, setAddNewUserFormData] = useState(
     addNewUserFormInitialState
   );
-
-  console.log(addNewUserFormData);
+  const router = useRouter();
 
   const handleSaveButtonDisable = () => {
     return Object.keys(addNewUserFormData).every(
@@ -33,6 +33,7 @@ const AddNewUser = () => {
     if (result) {
       setOpenDialog(false);
       setAddNewUserFormData(addNewUserFormInitialState);
+      router.refresh();
     }
   }
 
@@ -95,6 +96,8 @@ const AddNewUser = () => {
           </DialogContent>
         </Dialog>
       </div>
+
+      <div></div>
     </div>
   );
 };
