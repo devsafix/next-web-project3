@@ -67,3 +67,34 @@ export async function deleteUserAction(id, pathToRevalidate) {
     };
   }
 }
+
+export async function editNewUserAction(id, formData, pathToRevalidate) {
+  await connectToDB();
+
+  try {
+    const { firstName, lastName, email, address } = formData;
+    const newlyEditedUser = await User.findByIdAndUpdate(
+      { _id: id },
+      { firstName, lastName, email, address },
+      { new: true }
+    );
+    if (newlyEditedUser) {
+      revalidatePath(pathToRevalidate);
+      return {
+        success: true,
+        message: "User edited successfully",
+      };
+    } else {
+      return {
+        success: false,
+        message: "Some error occurred! Please try again",
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: "Some error occurred! Please try again",
+    };
+  }
+}

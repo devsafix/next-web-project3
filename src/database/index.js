@@ -5,7 +5,7 @@ const connectToDB = async () => {
     "mongodb+srv://nextBlog:Ex50Sp7yDlwhiirY@cluster0.euq4zn2.mongodb.net/";
   mongoose
     .connect(connectionUrl)
-    .then(() => console.log("Blog Database Is Connected"))
+    .then(() => console.log("Database Is Connected"))
     .catch((error) => console.log(error));
 };
 

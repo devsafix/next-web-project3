@@ -1,6 +1,10 @@
 "use client";
 
-import { addNewUserAction, getAllUserAction } from "@/actions";
+import {
+  addNewUserAction,
+  editNewUserAction,
+  getAllUserAction,
+} from "@/actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,15 +15,21 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { UserContext } from "@/context";
 import { addNewUserFormControls, addNewUserFormInitialState } from "@/utils";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 const AddNewUser = () => {
-  const [openDialog, setOpenDialog] = useState(false);
-  const [addNewUserFormData, setAddNewUserFormData] = useState(
-    addNewUserFormInitialState
-  );
+  const {
+    openDialog,
+    setOpenDialog,
+    addNewUserFormData,
+    setAddNewUserFormData,
+    currentEditedId,
+    setCurrentEditedId,
+  } = useContext(UserContext);
+
   const router = useRouter();
 
   const handleSaveButtonDisable = () => {
@@ -29,10 +39,18 @@ const AddNewUser = () => {
   };
 
   async function handleAddNewUserAction() {
-    const result = await addNewUserAction(addNewUserFormData);
+    const result =
+      currentEditedId !== null
+        ? await editNewUserAction(
+            currentEditedId,
+            addNewUserFormData,
+            "/user-management"
+          )
+        : await addNewUserAction(addNewUserFormData);
     if (result) {
       setOpenDialog(false);
       setAddNewUserFormData(addNewUserFormInitialState);
+      setCurrentEditedId(null);
       router.refresh();
     }
   }
@@ -51,11 +69,14 @@ const AddNewUser = () => {
           onOpenChange={() => {
             setOpenDialog(false);
             setAddNewUserFormData(addNewUserFormInitialState);
+            setCurrentEditedId(null);
           }}
         >
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Add User</DialogTitle>
+              <DialogTitle>
+                {currentEditedId !== null ? "Update User" : "Add New User"}
+              </DialogTitle>
             </DialogHeader>
             <form action={handleAddNewUserAction} className="grid gap-4 py-4">
               {addNewUserFormControls.map((item) => (
